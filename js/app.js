@@ -1,25 +1,26 @@
 /*global angular*/
+/*global app*/
 (function() {
 
-  var app = angular.module('gemStore', [ ]);
+  var app = angular.module('gemStore', ['store-products']);
   
-  app.directive('productTitle', function() {
-      return {
-      restrict: 'E',
-      templateUrl: '../product/product-title.html'
-    };
-  });
-  
-  app.directive('productPanels', function() {
-      return {
-      restrict: 'E',
-      templateUrl: '../product/product-panels.html'
-    };
-  });
-
-  app.controller('StoreController', function() {
+  /*app.controller('StoreController', function() {
       this.products = gems;
   });
+  
+  $http({ method: 'GET', url: '/products.json' });
+  $http.get('/products.json', {apiKey: 'myApiKey'});
+  $http.post('/path/to/products.json', {param: 'value'});
+  $http.delete('/path/to/products.json');
+  */
+  
+  app.controller('StoreController', ['$http', function($http) {
+    var store = this;
+    store.products = [ ];
+    $http.get('../service/products.json').success(function(data) {
+      store.products = data;
+    });
+  }]);
 
   app.controller('ReviewController', function() {
       this.review = {};
@@ -36,27 +37,8 @@
       this.current = newGallery || 0;
     };
   });
-  
-    app.directive('productTabs', function() {
-      return {
-      restrict: 'E',
-      templateUrl: '../product/product-tabs.html',
-      controller: function() {
-        this.tab = 1;
 
-          this.setTab = function(newValue){
-            this.tab = newValue;
-          };
-      
-          this.isSet = function(tabName){
-            return this.tab === tabName;
-          };
-      },
-      controllerAs: 'tab'  
-    };
-  });
-
-  var gems = [{
+  /*var gems = [{
     name: 'Azurite',
     description: "Some gems have hidden qualities beyond their luster, beyond their shine... Azurite is one of those gems.",
     shine: 8,
@@ -80,5 +62,5 @@
       author: "tim@example.org",
       createdOn: 1397490980837
     }]
-  }];
+  }];*/
 })();
